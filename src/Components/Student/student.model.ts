@@ -6,17 +6,19 @@ import mongoose from 'mongoose';
 
 const { Schema, model } = mongoose;
 
-// const attandanceSchema = new mongoose.Schema({
-//     studentId: String,
-//     present: Boolean,
-// });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const attandanceSchema = new mongoose.Schema({
+    studentId: String,
+	date:String,
+    present: Boolean,
+});
 
 // const userSchema = new mongoose.Schema({
 //     name: String,
 //     age: Number,
 // });
 
-// Faculty Schema For DataBase
+// Student Schema For DataBase
 const studentSchema = new Schema(
 	{
 		name: {
@@ -26,6 +28,13 @@ const studentSchema = new Schema(
 		emailId: {
 			type: Schema.Types.String,
 			required: true,
+			unique:true
+		},
+		phone_number: {
+			type: Schema.Types.Number,
+			// required: true,
+			unique:true,
+			minlength:10
 		},
 		password: {
 			type: Schema.Types.String,
@@ -35,11 +44,11 @@ const studentSchema = new Schema(
 			type: Schema.Types.String,
 			required: true,
 		},
-		// departmentId: {
-		// 	type: Schema.Types.ObjectId,
-		// 	required: true,
-		// 	ref: 'Department',
-		// },
+		departmentId: {
+			type: Schema.Types.ObjectId,
+			required: true,
+			ref: 'Department',
+		},
 		authToken: {
 			type: Schema.Types.String,
 			required: true,
@@ -54,20 +63,17 @@ const studentSchema = new Schema(
 			type: Schema.Types.Number,
 			required: true,
 		},
-		// onRoll: {
-		//     type: Schema.Types.Boolean,
-		//     required: true,
-		//     default: true
-		// },
-		// attendance: [{
-		//     type:mongoose.Schema.Types.Mixed,
-		//     default:[]
-		// }]
+		attendance: [{
+		    type:mongoose.Schema.Types.Mixed,
+		    default:[]
+		}]
 	},
 	{
 		timestamps: true,
 	},
 );
+
+studentSchema.index({ emailId: 1, departmentId: 1 }, { unique: true });
 
 //encrypt password
 studentSchema.pre('save', async function (next) {

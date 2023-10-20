@@ -8,8 +8,10 @@ import Config from '../../config';
 import {
 	createStudent,
 	findStudentByEmailId,
-	findStudentyById,
+	findStudentById,
 	findStudents,
+	deleteAll,
+	getAbsentStudentBatchYearSemesterDateWise
 } from './student.DAL';
 
 
@@ -17,9 +19,10 @@ class studentController {
 	async createStudent(req, res, next) {
 		try {
 			const studentObj = req.body;
-			console.log(studentObj);
-			const student = await createStudent(studentObj);
 			// console.log(studentObj);
+			const student = await createStudent(studentObj);
+
+			// console.log(student);
 			await student.save();
 
 			res.status(201).send({
@@ -105,7 +108,7 @@ class studentController {
 	async logOutStudent(req, res) {
 		try {
 			const id = req.loginUser.id;
-			const student = await findStudentyById(id);
+			const student = await findStudentById(id);
 			if (!student) {
 				res.status(404).send({
 					success: false,
@@ -152,7 +155,7 @@ class studentController {
 		try {
 			const id = req.params.id;
 			// console.log(id)
-			const student = await findStudentyById(id);
+			const student = await findStudentById(id);
 			// console.log(student)
 			if (!student) {
 				res.status(404).send({
@@ -189,7 +192,7 @@ class studentController {
 	async deleteStudent(req, res) {
 		try {
 			const id = req.params.id;
-			const student = await findStudentyById(id);
+			const student = await findStudentById(id);
 
 			if (!student) {
 				res.status(404).send({
@@ -203,8 +206,25 @@ class studentController {
 				data: {
 					statusCode: 200,
 					data: student,
-					message: 'student Deleted Sucessfully',
+					message: 'student Deleted Successfully',
 				},
+			});
+		} catch (error) {
+			res.status(500).send({
+				success: false,
+				error: {
+					statusCode: 500,
+					message: 'Error while deleting student',
+				},
+			});
+		}
+	}
+
+	async deleteAllStudents(req, res) {
+		try {
+			await deleteAll();
+			res.status(200).send({
+				message:'All Students Deleted successfully!'
 			});
 		} catch (error) {
 			res.status(500).send({
@@ -219,7 +239,7 @@ class studentController {
 
 	async getProfile(req, res, next) {
 		try {
-			const student = await findStudentyById(req.loginUser._id);
+			const student = await findStudentById(req.loginUser._id);
 			if (!student) {
 				res.status(404).send({
 					success: false,
@@ -240,5 +260,21 @@ class studentController {
 			});
 		}
 	}
+
+	   /**
+   * Get Absent Student List
+   * @param req => Express Request
+   * @param res => Express Response
+   */
+	   async getAbsentStudentBatchYearSemesterDateWise(req, res) {
+		try {
+		  const data = await getAbsentStudentBatchYearSemesterDateWise(req.body);
+		  res.status(200).send({ success: true, data: { statusCode: 200, data: data, message: 'Success' } });
+		} catch {
+		  res
+			.status(500)
+			.send({ success: false, data: { statusCode: 500, message: 'Something went wrong while retrieving data' } });
+		}
+	  }
 }
 export default studentController;

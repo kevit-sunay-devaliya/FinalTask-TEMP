@@ -53,10 +53,8 @@ class facultyController {
 			}
 
 			const faculty = await findFacultyByEmailId(emailId);
-
 			if (faculty) {
 				const match = await bcrypt.compare(password, faculty.password);
-
 				if (match) {
 					// const privateKey = fs.readFileSync(
 					//     join(__dirname,'../../../keys/Private.key'),
@@ -135,7 +133,7 @@ class facultyController {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async getFaculties(req, res, next) {
 		try {
-			const faculties = await findFaculties(req.accessRoles);
+			const faculties = await findFaculties();
 			res.status(200).send({
 				success: true,
 				data: { statusCode: 200, data: faculties, message: 'Success' },

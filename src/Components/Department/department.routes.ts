@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
-
+import authorization from '../../utils/adminAuth';
 import authentication from '../../utils/authentication';
-import authorization from '../../utils/authorization';
+
 import departmentController from './department.controller';
 
 class departmentRoutes {

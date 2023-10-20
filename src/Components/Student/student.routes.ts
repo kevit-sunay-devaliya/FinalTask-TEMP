@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import authentication from '../../utils/authentication';
-import studentController from './student.controller';
 
-// import authorization from '../../utils/authorization';
+import authentication from '../../utils/authentication';
+import authorization from '../../utils/facultyAuth';
+import studentController from './student.controller';
 
 class studentRoutes {
 	public router: Router;
@@ -16,7 +16,12 @@ class studentRoutes {
 
 	initalizeRoutes() {
 		//Create New Student
-		this.router.post('/signup', this.studentController.createStudent);
+		this.router.post(
+			'/signup',
+			authentication,
+			authorization,
+			this.studentController.createStudent,
+		);
 
 		//Login Student
 		this.router.post('/login', this.studentController.loginStudent);
@@ -32,6 +37,7 @@ class studentRoutes {
 		this.router.get(
 			'/',
 			authentication,
+			authorization,
 			this.studentController.getStudents,
 		);
 
@@ -46,7 +52,16 @@ class studentRoutes {
 		this.router.delete(
 			'/delete/:id?',
 			authentication,
+			authorization,
 			this.studentController.deleteStudent,
+		);
+
+		//Delete All Students
+		this.router.delete(
+			'/delete',
+			authentication,
+			authorization,
+			this.studentController.deleteAllStudents,
 		);
 
 		//Get Profile
@@ -54,6 +69,12 @@ class studentRoutes {
 			'/me',
 			authentication,
 			this.studentController.getProfile,
+		);
+
+		//Student Analysis Routes
+		this.router.post(
+			'/getAbsentStudents',
+			this.studentController.getAbsentStudentBatchYearSemesterDateWise,
 		);
 	}
 }

@@ -72,7 +72,7 @@ class departmentController {
 	async updateDepartment(req, res) {
 		try {
 			const id = req.params.id;
-			const department = new Department(await findDepartmentById(id));
+			const department = await findDepartmentById(id);
 			if (!department) {
 				res.status(404).send({
 					success: false,
@@ -104,7 +104,7 @@ class departmentController {
 	async deleteDepartment(req, res) {
 		try {
 			const id = req.params.id;
-			const department = new Department(await findDepartmentById(id));
+			const department = await findDepartmentById(id);
 			if (!department) {
 				res.status(404).send({
 					success: false,

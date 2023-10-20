@@ -8,6 +8,7 @@ const departmentSchema = new Schema(
 		name: {
 			type: Schema.Types.String,
 			required: true,
+			unique:true
 		},
 		totalSeat: {
 			type: Schema.Types.Number,
@@ -16,6 +17,7 @@ const departmentSchema = new Schema(
 		initial: {
 			type: Schema.Types.String,
 			required: true,
+			unique:true
 		},
 	},
 	{

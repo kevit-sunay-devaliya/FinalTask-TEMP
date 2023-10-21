@@ -7,7 +7,7 @@ import { findStudentById } from '../Student/student.DAL';
 export async function fillAttendance(attendanceBody) {
 	try {
 		attendanceBody.map(async (attendance) => {
-			if (attendance.studentId && attendance.date && attendance.present) {
+			if ((attendance.studentId && attendance.date && attendance.present)) {
 				const student = await findStudentById(attendance.studentId);
 				if (
 					!student.attendance.some(
@@ -18,6 +18,7 @@ export async function fillAttendance(attendanceBody) {
 						date: attendance.date,
 						present: attendance.present,
 					});
+					
 					await student.save();
 				}
                 else{

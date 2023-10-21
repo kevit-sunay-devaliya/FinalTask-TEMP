@@ -58,7 +58,7 @@ class studentRoutes {
 
 		//Delete All Students
 		this.router.delete(
-			'/delete',
+			'/del',
 			authentication,
 			authorization,
 			this.studentController.deleteAllStudents,
@@ -75,6 +75,20 @@ class studentRoutes {
 		this.router.post(
 			'/getAbsentStudents',
 			this.studentController.getAbsentStudentBatchYearSemesterDateWise,
+		);
+
+		//get present Students
+		this.router.post(
+			'/getMoreThen75PercentAttendanceStudent',
+			this.studentController.getMoreThen75PercentStudent,
+		);
+
+		//get present Students
+		this.router.post(
+			'/getVacancySeat',
+			authentication,
+			authorization,
+			this.studentController.getVacancySeat,
 		);
 	}
 }

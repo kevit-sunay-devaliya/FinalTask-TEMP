@@ -11,9 +11,10 @@ import {
 	findStudentById,
 	findStudents,
 	deleteAll,
-	getAbsentStudentBatchYearSemesterDateWise
+	getAbsentStudentBatchYearSemesterDateWise,
+	getMoreThen75PercentStudent,
+	getVacancySeat,
 } from './student.DAL';
-
 
 class studentController {
 	async createStudent(req, res, next) {
@@ -224,7 +225,7 @@ class studentController {
 		try {
 			await deleteAll();
 			res.status(200).send({
-				message:'All Students Deleted successfully!'
+				message: 'All Students Deleted successfully!',
 			});
 		} catch (error) {
 			res.status(500).send({
@@ -261,20 +262,70 @@ class studentController {
 		}
 	}
 
-	   /**
-   * Get Absent Student List
-   * @param req => Express Request
-   * @param res => Express Response
-   */
-	   async getAbsentStudentBatchYearSemesterDateWise(req, res) {
+	/**
+	 * Get Absent Student List
+	 * @param req => Express Request
+	 * @param res => Express Response
+	 */
+	async getAbsentStudentBatchYearSemesterDateWise(req, res) {
 		try {
-		  const data = await getAbsentStudentBatchYearSemesterDateWise(req.body);
-		  res.status(200).send({ success: true, data: { statusCode: 200, data: data, message: 'Success' } });
+			const data = await getAbsentStudentBatchYearSemesterDateWise(
+				req.body,
+			);
+			res.status(200).send({
+				success: true,
+				data: { statusCode: 200, data: data, message: 'Success' },
+			});
 		} catch {
-		  res
-			.status(500)
-			.send({ success: false, data: { statusCode: 500, message: 'Something went wrong while retrieving data' } });
+			res.status(500).send({
+				success: false,
+				data: {
+					statusCode: 500,
+					message: 'Something went wrong while retrieving data',
+				},
+			});
 		}
-	  }
+	}
+
+	/**
+	 * Get Students whose Attendance is more then 75%
+	 * @param req => Express Request
+	 * @param res => Express Response
+	 */
+	async getMoreThen75PercentStudent(req, res) {
+		try {
+			const data = await getMoreThen75PercentStudent(req.body);
+			res.status(200).send({
+				success: true,
+				data: { statusCode: 200, data: data, message: 'Success' },
+			});
+		} catch {
+			res.status(500).send({
+				success: false,
+				data: {
+					statusCode: 500,
+					message: 'Something went wrong white retrieving data',
+				},
+			});
+		}
+	}
+
+	async getVacancySeat(req, res) {
+		try {
+			const data = await getVacancySeat(req.body);
+			res.status(200).send({
+				success: true,
+				data: { statusCode: 200, data: data, message: 'Success' },
+			});
+		} catch {
+			res.status(500).send({
+				success: false,
+				data: {
+					statusCode: 500,
+					message: 'Something went wrong white retrieving data',
+				},
+			});
+		}
+	}
 }
 export default studentController;
